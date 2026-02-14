@@ -113,11 +113,6 @@
         animation: fadeIn 1s forwards;
     }
 
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
     #celebrateMessage {
         display: none;
         font-size: 1.8rem;
@@ -125,30 +120,35 @@
         animation: fadeIn 1.5s forwards;
     }
 
-    #celebrateGif {
+    #celebrationRow {
         display: none;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
         margin-top: 20px;
-        width: 250px;
-        border-radius: 20px;
-        opacity: 0;
-        transition: opacity 1s ease;
     }
 
-    #celebrateGif.show {
-        opacity: 1;
+    #celebrateGif {
+        width: 250px;
+        border-radius: 20px;
     }
 
     #rose {
-    font-size: 90px;
-    opacity: 0;
-    transform: scale(0.5);
-    transition: all 0.6s ease;
-}
+        font-size: 90px;
+        opacity: 0;
+        transform: scale(0.5);
+        transition: all 0.6s ease;
+    }
 
-#rose.show {
-    opacity: 1;
-    transform: scale(1);
-}
+    #rose.show {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
 
     canvas {
         position: fixed;
@@ -172,21 +172,18 @@
     </div>
 
     <div class="success" id="successMessage">
-        YAYYYYY!! 💕
+        YAYYYYY ❤️ You just made me the happiest person alive!! 💕
     </div>
 
     <div id="celebrateMessage">
         Yay! I'll be seeing you soon to celebrate! 💕
     </div>
 
-<div id="celebrationRow" style="display:none; align-items:center; justify-content:center; gap:20px; margin-top:20px;">
-    <img id="celebrateGif" 
-         src="https://media.tenor.com/lrtN5Vp1muUAAAAj/dancing-bears-peach-goma-ositos-bailando.gif"
-         style="width:250px; border-radius:20px;">
-
-    <div id="rose">🌹</div>
-</div>
-
+    <div id="celebrationRow">
+        <img id="celebrateGif" 
+             src="https://media.tenor.com/2roX3uxz_68AAAAC/happy-dance.gif">
+        <div id="rose">🌹</div>
+    </div>
 </div>
 
 <div class="hearts" id="hearts"></div>
@@ -227,17 +224,12 @@
         document.querySelector(".buttons").style.display = "none";
         success.style.display = "block";
         document.getElementById("celebrateMessage").style.display = "block";
-
-        const gif = document.getElementById("celebrateGif");
-        gif.style.display = "block";
-        setTimeout(() => gif.classList.add("show"), 50);
-
-        startConfetti();
         document.getElementById("celebrationRow").style.display = "flex";
 
-const rose = document.getElementById("rose");
-setTimeout(() => rose.classList.add("show"), 100);
+        const rose = document.getElementById("rose");
+        setTimeout(() => rose.classList.add("show"), 100);
 
+        startConfetti();
     });
 
     const heartsContainer = document.getElementById("hearts");
@@ -272,9 +264,3 @@ setTimeout(() => rose.classList.add("show"), 100);
 
 </body>
 </html>
-
-
-
-
-
-

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be My Valentine?</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Comic Sans MS', cursive, sans-serif;
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        overflow: hidden;
+        text-align: center;
+        color: white;
+    }
+
+    .container {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    h1 {
+        font-size: 3rem;
+        margin-bottom: 40px;
+        animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    .name {
+        background: linear-gradient(45deg, #ff4d6d, #ff85a2, #ff4d6d);
+        background-size: 300%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shine 4s infinite;
+        font-weight: bold;
+        text-shadow: 0 0 15px rgba(255, 77, 109, 0.4);
+    }
+
+    @keyframes shine {
+        0% { background-position: 0% }
+        50% { background-position: 100% }
+        100% { background-position: 0% }
+    }
+
+    .buttons {
+        position: relative;
+        width: 300px;
+        height: 200px;
+    }
+
+    button {
+        padding: 15px 30px;
+        font-size: 1.2rem;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: 0.3s;
+        position: absolute;
+    }
+
+    #yesBtn {
+        background-color: #ff4d6d;
+        color: white;
+        left: 20px;
+        top: 70px;
+    }
+
+    #yesBtn:hover {
+        background-color: #ff1e4d;
+        transform: scale(1.1);
+    }
+
+    #noBtn {
+        background-color: white;
+        color: #ff4d6d;
+        right: 20px;
+        top: 70px;
+    }
+
+    .hearts {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: -1;
+    }
+
+    .heart {
+        position: absolute;
+        color: rgba(255,255,255,0.7);
+        font-size: 20px;
+        animation: float 6s linear infinite;
+    }
+
+    @keyframes float {
+        from { transform: translateY(100vh); }
+        to { transform: translateY(-10vh); }
+    }
+
+    .success {
+        display: none;
+        font-size: 2.5rem;
+        animation: fadeIn 1s forwards;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    #celebrateMessage {
+        display: none;
+        font-size: 1.8rem;
+        margin-top: 20px;
+        animation: fadeIn 1.5s forwards;
+    }
+
+    #celebrateGif {
+        display: none;
+        margin-top: 20px;
+        width: 250px;
+        border-radius: 20px;
+        opacity: 0;
+        transition: opacity 1s ease;
+    }
+
+    #celebrateGif.show {
+        opacity: 1;
+    }
+
+    #rose {
+        font-size: 90px;
+        position: fixed;
+        bottom: -100px;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+    }
+
+    .rise {
+        animation: riseRose 3s forwards ease-out;
+    }
+
+    @keyframes riseRose {
+        0% {
+            bottom: -100px;
+            opacity: 0;
+            transform: translateX(-50%) scale(0.5);
+        }
+        100% {
+            bottom: 40%;
+            opacity: 1;
+            transform: translateX(-50%) scale(1.2);
+        }
+    }
+
+    canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1 id="question">
+        Will you be my Valentine, 
+        <span class="name">Ash</span>? 💖
+    </h1>
+
+    <div class="buttons">
+        <button id="yesBtn">Yes 😍</button>
+        <button id="noBtn">No 🙈</button>
+    </div>
+
+    <div class="success" id="successMessage">
+        YAYYYYY ❤️ You just made me the happiest person alive!! 💕
+    </div>
+
+    <div id="celebrateMessage">
+        Yay! I'll be seeing you soon to celebrate! 💕
+    </div>
+
+    <img id="celebrateGif" 
+         src="https://media.tenor.com/2roX3uxz_68AAAAC/happy-dance.gif">
+    
+    <div id="rose">🌹</div>
+</div>
+
+<div class="hearts" id="hearts"></div>
+<canvas id="confetti"></canvas>
+
+<script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const success = document.getElementById("successMessage");
+    const question = document.getElementById("question");
+
+    const noTexts = [
+        "Are you sure? 🥺",
+        "Really sure? 😢",
+        "Think again 💔",
+        "I'll be sad 😭",
+        "Last chance 😳",
+        "You can't escape 😈"
+    ];
+
+    let noClickCount = 0;
+
+    noBtn.addEventListener("mouseover", () => {
+        const x = Math.random() * 250;
+        const y = Math.random() * 150;
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
+    });
+
+    noBtn.addEventListener("click", () => {
+        noBtn.textContent = noTexts[noClickCount % noTexts.length];
+        noBtn.style.transform = "scale(" + (1 - noClickCount * 0.1) + ")";
+        noClickCount++;
+    });
+
+    yesBtn.addEventListener("click", () => {
+        question.style.display = "none";
+        document.querySelector(".buttons").style.display = "none";
+        success.style.display = "block";
+        document.getElementById("celebrateMessage").style.display = "block";
+
+        const gif = document.getElementById("celebrateGif");
+        gif.style.display = "block";
+        setTimeout(() => gif.classList.add("show"), 50);
+
+        startConfetti();
+        document.getElementById("rose").classList.add("rise");
+    });
+
+    const heartsContainer = document.getElementById("hearts");
+    for (let i = 0; i < 30; i++) {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+        heartsContainer.appendChild(heart);
+    }
+
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    function startConfetti() {
+        for (let i = 0; i < 150; i++) {
+            setTimeout(() => {
+                ctx.fillStyle = `hsl(${Math.random()*360}, 100%, 70%)`;
+                ctx.fillRect(
+                    Math.random() * canvas.width,
+                    Math.random() * canvas.height,
+                    10,
+                    10
+                );
+            }, i * 20);
+        }
+    }
+</script>
+
+</body>
+</html>

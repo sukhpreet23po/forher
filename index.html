@@ -233,7 +233,11 @@
         setTimeout(() => gif.classList.add("show"), 50);
 
         startConfetti();
-        document.getElementById("rose").classList.add("rise");
+        document.getElementById("celebrationRow").style.display = "flex";
+
+const rose = document.getElementById("rose");
+setTimeout(() => rose.classList.add("show"), 100);
+
     });
 
     const heartsContainer = document.getElementById("hearts");
@@ -268,6 +272,7 @@
 
 </body>
 </html>
+
 
 
 

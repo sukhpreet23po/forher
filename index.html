@@ -22,7 +22,7 @@
         justify-content: center;
         align-items: center;
         position: relative;
-        z-index: 1; /* keeps content above confetti */
+        z-index: 1;
     }
 
     h1 {
@@ -127,7 +127,11 @@
     }
 
     .celebration img {
-        width: 200px;
+        width: 220px;
+    }
+
+    #rose {
+        font-size: 90px;
     }
 
     canvas {
@@ -135,7 +139,7 @@
         top: 0;
         left: 0;
         pointer-events: none;
-        z-index: -1; /* FIXED: confetti now behind everything */
+        z-index: -1;
     }
 </style>
 </head>
@@ -157,8 +161,11 @@
     </div>
 
     <div class="celebration" id="celebration">
+        <!-- Happy Dance GIF -->
         <img src="https://media.tenor.com/7U9Xj1Z4KQAAAAAC/happy-dance.gif" alt="Happy Dance">
-        <div id="rose" style="font-size:90px;">🌹</div>
+
+        <!-- Rose on the right -->
+        <div id="rose">🌹</div>
     </div>
 </div>
 

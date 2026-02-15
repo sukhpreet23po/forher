@@ -1,256 +1,173 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Be My Valentine?</title>
+    <title>Will You Be My Valentine?</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #ffe6f0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
 
-<style>
-    body {
-        margin: 0;
-        font-family: 'Comic Sans MS', cursive, sans-serif;
-        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-        overflow: hidden;
-        text-align: center;
-        color: white;
-    }
+        .container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2; /* keeps content above confetti */
+            text-align: center;
+        }
 
-    .container {
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-    }
+        h1 {
+            font-size: 3em;
+            color: #ff4d88;
+        }
 
-    h1 {
-        font-size: 3rem;
-        margin-bottom: 40px;
-        animation: pulse 1.5s infinite;
-    }
+        .name {
+            color: #ff1a75;
+            text-shadow: 0 0 10px #ff99cc;
+        }
 
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
-    }
+        .buttons {
+            margin-top: 20px;
+        }
 
-    .name {
-        background: linear-gradient(45deg, #ff4d6d, #ff85a2, #ff4d6d);
-        background-size: 300%;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: shine 4s infinite;
-        font-weight: bold;
-        text-shadow: 0 0 15px rgba(255, 77, 109, 0.4);
-    }
+        button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-    @keyframes shine {
-        0% { background-position: 0% }
-        50% { background-position: 100% }
-        100% { background-position: 0% }
-    }
+        .yes {
+            background-color: #ff4d88;
+            color: white;
+        }
 
-    .buttons {
-        position: relative;
-        width: 300px;
-        height: 200px;
-    }
+        .no {
+            background-color: #cccccc;
+        }
 
-    button {
-        padding: 15px 30px;
-        font-size: 1.2rem;
-        border: none;
-        border-radius: 50px;
-        cursor: pointer;
-        transition: 0.3s;
-        position: absolute;
-    }
+        .success {
+            font-size: 2em;
+            color: #ff1a75;
+            margin-top: 20px;
+            display: none;
+        }
 
-    #yesBtn {
-        background-color: #ff4d6d;
-        color: white;
-        left: 20px;
-        top: 70px;
-    }
+        .celebration {
+            display: none;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
 
-    #yesBtn:hover {
-        background-color: #ff1e4d;
-        transform: scale(1.1);
-    }
+        .celebration img {
+            width: 200px;
+        }
 
-    #noBtn {
-        background-color: white;
-        color: #ff4d6d;
-        right: 20px;
-        top: 70px;
-    }
-
-    .hearts {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        z-index: -1;
-    }
-
-    .heart {
-        position: absolute;
-        color: rgba(255,255,255,0.7);
-        font-size: 20px;
-        animation: float 6s linear infinite;
-    }
-
-    @keyframes float {
-        from { transform: translateY(100vh); }
-        to { transform: translateY(-10vh); }
-    }
-
-    .success {
-        display: none;
-        font-size: 2.5rem;
-        animation: fadeIn 1s forwards;
-    }
-
-    #celebrationRow {
-        display: none;
-        align-items: center;
-        justify-content: center;
-        gap: 20px;
-        margin-top: 20px;
-    }
-
-    #celebrateGif {
-        width: 250px;
-        border-radius: 20px;
-    }
-
-    #rose {
-        font-size: 90px;
-        opacity: 0;
-        transform: scale(0.5);
-        transition: all 0.6s ease;
-    }
-
-    #rose.show {
-        opacity: 1;
-        transform: scale(1);
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    canvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        pointer-events: none;
-    }
-</style>
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0; /* keeps confetti behind everything */
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 id="question">
-        Will you be my Valentine, 
-        <span class="name">Ash</span>? 💖
-    </h1>
+    <h1>Will you be my Valentine, <span class="name">Ash</span>? ❤️</h1>
 
     <div class="buttons">
-        <button id="yesBtn">Yes 😍</button>
-        <button id="noBtn">No 🙈</button>
+        <button class="yes" onclick="sayYes()">Yes</button>
+        <button class="no" onclick="moveNo(this)">No</button>
     </div>
 
     <div class="success" id="successMessage">
         YAYYYYY ❤️ I'll be seeing you soon to celebrate!! 💕
     </div>
 
-    <div id="celebrationRow">
-        <img id="celebrateGif" 
-             src="https://media.tenor.com/lrtN5Vp1muUAAAAi/dancing-bears-peach-goma-ositos-bailando.gif">
-        <div id="rose">🌹</div>
+    <div class="celebration" id="celebration">
+        <img src="https://media.tenor.com/7U9Xj1Z4KQAAAAAC/happy-dance.gif" alt="Happy Dance">
+        <img src="https://media.tenor.com/3Xjz2b0tY6UAAAAi/rose.gif" alt="Rose">
     </div>
 </div>
 
-<div class="hearts" id="hearts"></div>
 <canvas id="confetti"></canvas>
 
 <script>
-    const noBtn = document.getElementById("noBtn");
-    const yesBtn = document.getElementById("yesBtn");
-    const success = document.getElementById("successMessage");
-    const question = document.getElementById("question");
+function sayYes() {
+    document.getElementById("successMessage").style.display = "block";
+    document.getElementById("celebration").style.display = "flex";
+    startConfetti();
+}
 
-    const noTexts = [
-        "Are you sure? 🥺",
-        "Really sure? 😢",
-        "Think again 💔",
-        "I'll be sad 😭",
-        "Last chance 😳",
-        "You can't escape 😈"
-    ];
+function moveNo(button) {
+    const x = Math.random() * (window.innerWidth - button.offsetWidth);
+    const y = Math.random() * (window.innerHeight - button.offsetHeight);
+    button.style.position = "absolute";
+    button.style.left = x + "px";
+    button.style.top = y + "px";
+}
 
-    let noClickCount = 0;
+/* Confetti Animation */
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
 
-    noBtn.addEventListener("mouseover", () => {
-        const x = Math.random() * 250;
-        const y = Math.random() * 150;
-        noBtn.style.left = x + "px";
-        noBtn.style.top = y + "px";
-    });
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-    noBtn.addEventListener("click", () => {
-        noBtn.textContent = noTexts[noClickCount % noTexts.length];
-        noBtn.style.transform = "scale(" + (1 - noClickCount * 0.1) + ")";
-        noClickCount++;
-    });
+let confetti = [];
 
-    yesBtn.addEventListener("click", () => {
-        question.style.display = "none";
-        document.querySelector(".buttons").style.display = "none";
-        success.style.display = "block";
-        document.getElementById("celebrationRow").style.display = "flex";
-
-        const rose = document.getElementById("rose");
-        setTimeout(() => rose.classList.add("show"), 100);
-
-        startConfetti();
-    });
-
-    const heartsContainer = document.getElementById("hearts");
-    for (let i = 0; i < 30; i++) {
-        const heart = document.createElement("div");
-        heart.classList.add("heart");
-        heart.innerHTML = "💖";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.animationDuration = (3 + Math.random() * 3) + "s";
-        heartsContainer.appendChild(heart);
+function startConfetti() {
+    confetti = [];
+    for (let i = 0; i < 80; i++) { // reduced amount
+        confetti.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 6 + 4,
+            d: Math.random() * 80,
+            color: "hsl(" + Math.random() * 360 + ", 100%, 50%)",
+            tilt: Math.floor(Math.random() * 10) - 10
+        });
     }
+    drawConfetti();
+}
 
-    const canvas = document.getElementById("confetti");
-    const ctx = canvas.getContext("2d");
+function drawConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    confetti.forEach((c, i) => {
+        ctx.beginPath();
+        ctx.fillStyle = c.color;
+        ctx.fillRect(c.x, c.y, c.r, c.r);
+
+        c.y += Math.cos(c.d) + 1 + c.r / 2;
+        c.x += Math.sin(c.d);
+
+        if (c.y > canvas.height) {
+            confetti[i].y = -10;
+            confetti[i].x = Math.random() * canvas.width;
+        }
+    });
+
+    requestAnimationFrame(drawConfetti);
+}
+
+window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-
-    function startConfetti() {
-        for (let i = 0; i < 150; i++) {
-            setTimeout(() => {
-                ctx.fillStyle = `hsl(${Math.random()*360}, 100%, 70%)`;
-                ctx.fillRect(
-                    Math.random() * canvas.width,
-                    Math.random() * canvas.height,
-                    10,
-                    10
-                );
-            }, i * 20);
-        }
-    }
+});
 </script>
 
 </body>
 </html>
-
-

@@ -183,3 +183,73 @@
     const yesBtn = document.getElementById("yesBtn");
     const success = document.getElementById("successMessage");
     const question = document.getElementById("question");
+
+    const noTexts = [
+        "Are you sure? 🥺",
+        "Really sure? 😢",
+        "Think again 💔",
+        "I'll be sad 😭",
+        "Last chance 😳",
+        "You can't escape 😈"
+    ];
+
+    let noClickCount = 0;
+
+    noBtn.addEventListener("mouseover", () => {
+        const x = Math.random() * 250;
+        const y = Math.random() * 150;
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
+    });
+
+    noBtn.addEventListener("click", () => {
+        noBtn.textContent = noTexts[noClickCount % noTexts.length];
+        noBtn.style.transform = "scale(" + (1 - noClickCount * 0.1) + ")";
+        noClickCount++;
+    });
+
+    yesBtn.addEventListener("click", () => {
+        question.style.display = "none";
+        document.querySelector(".buttons").style.display = "none";
+        success.style.display = "block";
+        document.getElementById("celebrationRow").style.display = "flex";
+
+        const rose = document.getElementById("rose");
+        setTimeout(() => rose.classList.add("show"), 100);
+
+        startConfetti();
+    });
+
+    const heartsContainer = document.getElementById("hearts");
+    for (let i = 0; i < 30; i++) {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+        heartsContainer.appendChild(heart);
+    }
+
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    function startConfetti() {
+        for (let i = 0; i < 150; i++) {
+            setTimeout(() => {
+                ctx.fillStyle = `hsl(${Math.random()*360}, 100%, 70%)`;
+                ctx.fillRect(
+                    Math.random() * canvas.width,
+                    Math.random() * canvas.height,
+                    10,
+                    10
+                );
+            }, i * 20);
+        }
+    }
+</script>
+
+</body>
+</html>
+
